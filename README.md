@@ -1,1 +1,0 @@
-Lokaverkefni 2017
