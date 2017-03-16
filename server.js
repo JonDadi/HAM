@@ -1,9 +1,15 @@
 const express = require('express');
 const fs = require('fs');
-
+const db = require('./dbConnect');
 const app = express();
+const bodyParser = require('body-parser');
 
 app.set('port', (process.env.PORT || 3001));
+
+app.use( bodyParser.json() );
+app.use( bodyParser.urlencoded({ extended: true}));
+
+db.createTables();
 
 // Express only serves static assets in production
 if (process.env.NODE_ENV === 'production') {
@@ -11,148 +17,67 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 
-app.get('/activityMockData', (req, res) => {
-  const mockData = [
-    {
-      time: '08:00-9:00',
-      content: '',
-      pleasure: 0,
-      skill: 0,
-    },
-    {
-      time: '10:00-11:00',
-      content: 'Fara í ræktina',
-      pleasure: 5,
-      skill: 7,
-    },
-    {
-      time: '11:00-12:00',
-      content: 'Fara í ræktina',
-      pleasure: 5,
-      skill: 7,
-    },
-    {
-      time: '12:00-13:00',
-      content: 'Borða',
-      pleasure: 5,
-      skill: 7,
-    },
-    {
-      time: '13:00-14:00',
-      content: 'Sund',
-      pleasure: 5,
-      skill: 7,
-    },
-    {
-      time: '15:00-16:00',
-      content: 'Fara í tíma',
-      pleasure: 5,
-      skill: 7,
-    },
-    {
-      time: '17:00-18:00',
-      content: 'Fara í tíma',
-      pleasure: 5,
-      skill: 7,
-    },
-    {
-      time: '18:00-19:00',
-      content: 'Læra heima',
-      pleasure: 5,
-      skill: 7,
-    },
-    {
-      time: '19:00-20:00',
-      content: 'Borða',
-      pleasure: 5,
-      skill: 7,
-    },
-    {
-      time: '20:00-21:00',
-      content: 'Horfa á sjónvarp',
-      pleasure: 5,
-      skill: 7,
-    },
-    {
-      time: '21:00-22:00',
-      content: 'Sofa',
-      pleasure: 5,
-      skill: 7,
-    },
-    {
-      time: '22:00-23:00',
-      content: 'Sofa',
-      pleasure: 5,
-      skill: 7,
-    },
-    {
-      time: '23:00-00:00',
-      content: 'Sofa',
-      pleasure: 5,
-      skill: 7,
-    },
-  ];
-  res.json(mockData);
+app.get('/activityStatistics/:numDays', (req, res) => {
+  // User id hardcoded untill login is implemented.
+  const userId = 1;
+  const numDays = parseInt(req.params.numDays);
+  db.getActivityStats( userId, numDays ).
+  then( stats => {
+    res.json(stats);
+  }).
+  catch( error => {
+    console.log(error);
+  })
+
+})
+
+app.post('/insertActivityItem', (req, res) => {
+    const activityItem = req.body.activityItem;
+    db.updateActivityItem(activityItem, 1);
+});
+app.post('/insertScheduleItem', (req, res) => {
+    const scheduleItem = req.body.scheduleItem;
+    db.updateScheduleItem(scheduleItem, 1);
 });
 
-app.get('/scheduleMockData', (req, res) => {
-  const mockData = [
-    {
-      time: '08:00-9:00',
-      content: 'Læra heima',
-    },
-    {
-      time: '10:00-11:00',
-      content: 'Fara í ræktina',
-    },
-    {
-      time: '11:00-12:00',
-      content: 'Fara í ræktina',
-    },
-    {
-      time: '12:00-13:00',
-      content: 'Borða',
-    },
-    {
-      time: '13:00-14:00',
-      content: 'Sund',
-    },
-    {
-      time: '15:00-16:00',
-      content: 'Fara í tíma',
-    },
-    {
-      time: '17:00-18:00',
-      content: 'Fara í tíma',
-    },
-    {
-      time: '18:00-19:00',
-      content: 'Læra heima',
-    },
-    {
-      time: '19:00-20:00',
-      content: 'Borða',
-    },
-    {
-      time: '20:00-21:00',
-      content: 'Horfa á sjónvarp',
-    },
-    {
-      time: '21:00-22:00',
-      content: 'Sofa',
-    },
-    {
-      time: '22:00-23:00',
-      content: 'Sofa',
-    },
-    {
-      time: '23:00-00:00',
-      content: 'Sofa',
-    },
-  ];
+app.get('/getActivityItems/:date', (req, res) => {
+  const date = req.params.date;
 
-  res.json(mockData);
+  db.getActivityItemsForDate( date ).
+  then( data => {
+    if(data.length > 0) {
+      res.json(data);
+    } else {
+      db.createFreshActivityItems(date, 1).
+      then( activityItems => {
+        res.json(activityItems);
+      })
+    }
+  }).
+  catch( error => {
+    res.json('error');
+  });
 });
+
+app.get('/getScheduleItems/:date', (req, res) => {
+  const date = req.params.date;
+
+  db.getScheduleItemsForDate( date ).
+  then( data => {
+    if(data.length > 0) {
+      res.json(data);
+    } else {
+      db.createFreshScheduleItems(date, 1).
+      then( scheduleItems => {
+        res.json(scheduleItems);
+      })
+    }
+  }).
+  catch( error => {
+    res.json('error');
+  });
+});
+
 app.get('/commonWords', (req, res) => {
   const commonWords = ['Borða', 'Sofa', 'Læra heima', 'Dansa', 'Fara í ræktina'];
   res.json(commonWords);

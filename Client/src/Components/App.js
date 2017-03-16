@@ -16,6 +16,8 @@ class App extends Component {
         <a href="/activityTable">Virknitaflan mín</a>
         <br />
         <a href="/scheduleTable">Vikuáætlunin mín</a>
+        <br />
+        <a href="/statistics">Tölfræðin mín</a>
       </div>
     );
   }

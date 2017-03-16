@@ -12,6 +12,15 @@ class ScheduleItem extends Component {
     }
   }
 
+  componentWillReceiveProps( newProps ) {
+    const nextData = newProps.data;
+    if(!nextData.content) {
+      this.setState({isEditing: true });
+    } else {
+      this.setState( {isEditing: false });
+    }
+  }
+
   startEditing(){
       this.setState( { isEditing: true })
   }
@@ -20,8 +29,11 @@ class ScheduleItem extends Component {
     const newContent = (this.refs.newContent.value)
                        ? this.refs.newContent.value : this.props.data.content;
 
-    const newScheduleItem = {time: this.props.data.time, content: newContent};
-    this.props.updateScheduleItem( newScheduleItem );
+
+    if(newContent) {
+      const newScheduleItem = {time: this.props.data.time, content: newContent};
+      this.props.updateScheduleItem( newScheduleItem );
+    }
     this.setState({isEditing: false});
 
   }

@@ -5,15 +5,31 @@ import CommonSelect from './commonSelect';
 class ActivityItem extends Component {
   constructor(props){
     super(props);
-    let editing = true;
-    if(this.props.data.content) editing = false;
+    let editing;
+    console.log("Nýtt activityItem");
+    if(this.props.data.content) {
+      editing = false;
+    } else {
+      editing = true;
+    }
+
     this.state = {
       isEditing: editing
     }
   }
 
+  componentWillReceiveProps(newProps) {
+    const nextData = newProps.data;
+    if(!nextData.content || !nextData.skill || !nextData.pleasure) {
+      this.setState({ isEditing: true });
+    } else {
+      this.setState( {isEditing: false });
+    }
+
+  }
+
   startEditing(){
-      this.setState( { isEditing: true })
+      this.setState( { isEditing: true });
   }
 
   saveEdit(  ) {
@@ -29,14 +45,18 @@ class ActivityItem extends Component {
     if(this.refs.newContent.value){
       newContent = this.refs.newContent.value;
     }
+    if( !newContent || !newSkill || !newPleasure ) {
+      // User has not filled out all the inputs
+    } else {
+      console.log('Sending new activityItem to the db!')
+      const newActivityItem = {time: this.props.data.time,
+                               content: newContent,
+                               skill: newSkill,
+                               pleasure: newPleasure,};
+      this.props.updateActivityItem( newActivityItem );
 
-    const newActivityItem = {time: this.props.data.time,
-                             content: newContent,
-                             skill: newSkill,
-                             pleasure: newPleasure,};
-    this.props.updateActivityItem( newActivityItem );
+    }
     this.setState({isEditing: false});
-
   }
   fillInputBox( newValue ) {
     this.refs.newContent.value = newValue;
