@@ -1,15 +1,25 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import ActivityItem from './ActivityItem';
+import ActivityItem from './activityItem';
+import NavBarMenu from './navBarMenu';
+import { Table } from 'react-bootstrap';
+import Calendar from './calendar';
+import moment from 'moment';
+
 import './App.css';
 
 const commonWords = [];
 const mockData = [];
+const isInFuture = false;
 let numComponentsEditing = 0;
+
+// goo.gl/HnqwDX
+
 
 class ActivityTable extends Component {
   constructor(props){
     super(props);
+    console.log("Bý til activity table");
     this.state = {
       mockData,
       commonWords,
@@ -19,7 +29,7 @@ class ActivityTable extends Component {
   componentDidMount() {
     this.updateActivityTable(  );
   }
-
+ // hvar sofa brauðin?
   saveAllEdits() {
     for( let key in this.refs ){
       if(!this.refs.hasOwnProperty(key)) {
@@ -51,25 +61,28 @@ class ActivityTable extends Component {
     let newDate = this.refs.pickedDate.value;
     if(!newDate) newDate = this.getTodaysDate();
     console.log('dagsetning valin'+ newDate);
+    axios.get('/commonWords')
+      .then( res => {
+        this.setState({commonWords: res.data});
+      })
+      .catch( error =>{
+        console.log(error);
+    })
     axios.get('/getActivityItems/'+newDate)
       .then( res => {
         let newData = res.data;
         newData.sort( (a,b) => {
           return parseInt(a.time.substring(0,3)) - parseInt(b.time.substring(0,3));
         })
+        this.isInFuture = !moment().isAfter(newDate)
         this.setState({mockData: res.data});
       })
       .catch( error =>{
         console.log(error);
       })
 
-      axios.get('/commonWords')
-        .then( res => {
-          this.setState({commonWords: res.data});
-        })
-        .catch( error =>{
-          console.log(error);
-        })
+
+
   }
   incrementEditingCounter() {
     this.setState({numComponentsEditing: numComponentsEditing++});
@@ -85,14 +98,14 @@ class ActivityTable extends Component {
         break;
       }
     }
-    this.setState( {mockData: tmpStateData});
-
+    //this.setState( {mockData: tmpStateData});
     // Save/update the new activityItem on server.
     this.postToServer(newItem);
   }
   postToServer( newActivityItem ) {
     let newDate = this.refs.pickedDate.value;
     if(!newDate) newDate = this.getTodaysDate();
+
     newActivityItem.date = newDate;
     newActivityItem.userId = 1;
     axios.post('/insertActivityItem', {
@@ -114,55 +127,75 @@ class ActivityTable extends Component {
                       updateActivityItem={this.updateActivityItem.bind(this)}
                       commonWords={this.state.commonWords}
                       ref={'ai'+activityItemNum++}
-                      isEditing={this.incrementEditingCounter.bind(this)} />
+                      isEditing={this.incrementEditingCounter.bind(this)}
+                      isInFuture={this.isInFuture} />
        )
     });
-
-    if(this.state.numComponentsEditing > 1){
+    if(this.isInFuture){
       return (
-
-        <div className='activityTable'>
-          <input type='date'
-                 onChange={this.updateActivityTable.bind(this)}
-                 ref='pickedDate'></input>
-          <h1>Virknitafla!</h1>
-          <table>
-            <tbody>
-              <tr>
-                <th> Tími </th>
-                <th> Lýsing </th>
-                <th> Virkni </th>
-                <th> Ánægja </th>
-              </tr>
-              {activityItems}
-            </tbody>
-          </table>
-          <button onClick={this.saveAllEdits.bind(this)}>Vista allar færslur</button>
-        </div>
-      );
+          <div className='activityTable'>
+            <NavBarMenu />
+            <div className='dateWrapper'>
+              <h1>Vikuáætlunin mín</h1>
+              <label>
+                Dagsetning:
+                <input type='date'
+                       title="Dagsetning"
+                       onChange={this.updateActivityTable.bind(this)}
+                       ref='pickedDate' />
+              </label>
+            </div>
+            <div className='tableWrapper'>
+              <Table striped bordered condensed hover>
+                <thead>
+                  <tr>
+                    <th> Tími </th>
+                    <th> Lýsing </th>
+                    <th> Vista/Breyta </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {activityItems}
+                </tbody>
+              </Table>
+            </div>
+          </div>
+        );
     } else {
       return (
-
-        <div className='activityTable'>
-        <input type='date'
-               onChange={this.updateActivityTable.bind(this)}
-               ref='pickedDate'></input>
-          <h1>Virknitafla!</h1>
-          <table>
-            <tbody>
-              <tr>
-                <th> Tími </th>
-                <th> Lýsing </th>
-                <th> Virkni </th>
-                <th> Ánægja </th>
-              </tr>
-              {activityItems}
-            </tbody>
-          </table>
-        </div>
-      );
+          <div className='activityTable'>
+            <NavBarMenu />
+            <div className='dateWrapper'>
+              <h1>Virknitaflan mín</h1>
+              <label>
+                Dagsetning:
+                <input type='date'
+                       title="Dagsetning"
+                       onChange={this.updateActivityTable.bind(this)}
+                       ref='pickedDate' />
+              </label>
+            </div>
+            <div className='tableWrapper'>
+              <Table striped bordered condensed hover>
+                <thead>
+                  <tr>
+                    <th> Tími </th>
+                    <th> Lýsing </th>
+                    <th> Virkni </th>
+                    <th> Ánægja </th>
+                    <th> Vista/Breyta </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {activityItems}
+                </tbody>
+              </Table>
+            </div>
+          </div>
+        );
     }
-  }
+
+    }
 }
 
 export default ActivityTable;

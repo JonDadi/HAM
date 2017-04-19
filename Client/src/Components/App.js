@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './App.css';
+import NavBarMenu from './navBarMenu';
 
 class App extends Component {
 
@@ -12,12 +12,11 @@ class App extends Component {
                        updateScheduleItem={this.updateScheduleItem.bind(this)}/>
       </div>*/
       <div className="fontPage">
-        <h1>Hugræn Atferlismeðferð!</h1>
-        <a href="/activityTable">Virknitaflan mín</a>
-        <br />
-        <a href="/scheduleTable">Vikuáætlunin mín</a>
-        <br />
-        <a href="/statistics">Tölfræðin mín</a>
+        <NavBarMenu />
+        <div className="frontPageWrapper">
+          <h1>Hugræn Atferlismeðferð!</h1>
+          <p>Vantar efni!!</p>
+        </div>
       </div>
     );
   }

@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import './App.css';
 import CommonSelect from './commonSelect';
+import {Button} from 'react-bootstrap';
+import {Glyphicon} from 'react-bootstrap';
+import AutoInput from './autoInput';
 
 class ActivityItem extends Component {
   constructor(props){
     super(props);
     let editing;
-    console.log("Nýtt activityItem");
     if(this.props.data.content) {
       editing = false;
     } else {
@@ -14,77 +15,157 @@ class ActivityItem extends Component {
     }
 
     this.state = {
-      isEditing: editing
+      isEditing: editing,
+      badInput: false
     }
   }
 
   componentWillReceiveProps(newProps) {
+    this.setState({badInput: false});
     const nextData = newProps.data;
-    if(!nextData.content || !nextData.skill || !nextData.pleasure) {
-      this.setState({ isEditing: true });
+    const currData = this.props.data;
+    if(this.props.isInFuture){
+      if(!nextData.content) {
+        this.setState({ isEditing: true });
+      } else {
+        this.setState( {isEditing: false });
+      }
     } else {
-      this.setState( {isEditing: false });
+      if(!nextData.content || !nextData.skill || !nextData.pleasure) {
+        this.setState({ isEditing: true });
+      } else {
+        this.setState( {isEditing: false });
+      }
     }
-
   }
 
   startEditing(){
+      this.setState({badInput: false});
       this.setState( { isEditing: true });
   }
 
   saveEdit(  ) {
     let newContent = this.props.data.content;
-    let newSkill = this.props.data.skill;
-    let newPleasure = this.props.data.pleasure;
-    if(this.refs.pleasure.value){
-      newPleasure = this.refs.pleasure.value;
+    if(this.refs.newContent.state.value){
+      newContent = this.refs.newContent.state.value;
     }
-    if(this.refs.skill.value){
-      newSkill = this.refs.skill.value;
-    }
-    if(this.refs.newContent.value){
-      newContent = this.refs.newContent.value;
-    }
-    if( !newContent || !newSkill || !newPleasure ) {
-      // User has not filled out all the inputs
-    } else {
-      console.log('Sending new activityItem to the db!')
-      const newActivityItem = {time: this.props.data.time,
-                               content: newContent,
-                               skill: newSkill,
-                               pleasure: newPleasure,};
-      this.props.updateActivityItem( newActivityItem );
+    if(!this.props.isInFuture) {
+      let newSkill = this.props.data.skill;
+      let newPleasure = this.props.data.pleasure;
+      if(this.refs.pleasure.value){
+        newPleasure = this.refs.pleasure.value;
+      }
+      if(this.refs.skill.value){
+        newSkill = this.refs.skill.value;
+      }
+      if( !newContent || !newSkill || !newPleasure
+          || newSkill > 10 || newSkill < 0 || newPleasure > 10
+          || newPleasure < 0) {
+        // User has not filled out all the inputs or inputs are invalid
+        console.log("bad input!");
+        this.setState({badInput: true});
+      } else {
+        console.log('Sending new activityItem to the db!')
+        const newActivityItem = {time: this.props.data.time,
+                                 content: newContent,
+                                 skill: newSkill,
+                                 pleasure: newPleasure,};
+        this.props.updateActivityItem( newActivityItem );
+        this.setState({isEditing: false});
 
+      }
+    } else {
+      // Item is in the future,  so no skill or pleasure
+      if( !newContent) {
+        // User has not filled out all the inputs or inputs are invalid
+        console.log("bad input!");
+        this.setState({badInput: true});
+      } else {
+        console.log('Sending new activityItem to the db!')
+        const newActivityItem = {time: this.props.data.time,
+                                 content: newContent,
+                                 skill: 0,
+                                 pleasure: 0};
+        this.props.updateActivityItem( newActivityItem );
+        this.setState({isEditing: false});
+      }
     }
-    this.setState({isEditing: false});
+
+
   }
   fillInputBox( newValue ) {
     this.refs.newContent.value = newValue;
   }
 
-
+// <td><input type="text" title="Lýsing" placeholder={this.props.data.content} ref="newContent" /></td>
   render() {
     if(this.state.isEditing){
-      return (
-        <tr key={this.props.data.time}>
-          <td>{this.props.data.time}</td>
-          <td><input type="text" placeholder={this.props.data.content} ref="newContent" /></td>
-          <td><input type="number" min="1" max="10" placeholder={this.props.data.pleasure} ref="pleasure" /></td>
-          <td><input type="number" min="1" max="10" placeholder={this.props.data.skill} ref="skill" /></td>
-          <td><CommonSelect words={this.props.commonWords} ref="selector" fillInputBox={this.fillInputBox.bind(this)}/></td>
-          <td><button onClick={this.saveEdit.bind(this)}>Vista</button></td>
-        </tr>
-      )
+        if(this.state.badInput){
+          // Bad input
+          if(this.props.isInFuture ) {
+            return (
+              <tr key={this.props.data.time} className='badInput'>
+                <td>{this.props.data.time}</td>
+                <td><AutoInput placeholder={this.props.data.content} commonWords={this.props.commonWords} ref="newContent"/></td>
+                <td><Button bsStyle="primary" title="Vista" onClick={this.saveEdit.bind(this)}><Glyphicon glyph="glyphicon glyphicon-floppy-disk"></Glyphicon></Button></td>
+              </tr>
+            )
+          } else {
+            return (
+              <tr key={this.props.data.time} className='badInput'>
+                <td>{this.props.data.time}</td>
+                <td><AutoInput placeholder = {this.props.data.content} commonWords={this.props.commonWords} ref="newContent"/></td>
+                <td><input type="number" min="1" max="10" title="Virkni" placeholder={this.props.data.pleasure} ref="pleasure" /></td>
+                <td><input type="number" min="1" max="10" title="Ánægja" placeholder={this.props.data.skill} ref="skill" /></td>
+                <td><Button bsStyle="primary" title="Vista" onClick={this.saveEdit.bind(this)}><Glyphicon glyph="glyphicon glyphicon-floppy-disk"></Glyphicon></Button></td>
+              </tr>
+            )
+          }
+        } else {
+          // Correct input
+          if(this.props.isInFuture){
+            return (
+              <tr key={this.props.data.time} className='editing'>
+                <td>{this.props.data.time}</td>
+                <td><AutoInput placeholder={this.props.data.content} commonWords={this.props.commonWords} ref="newContent"/></td>
+                <td><Button bsStyle="primary" title="Vista" onClick={this.saveEdit.bind(this)}><Glyphicon glyph="glyphicon glyphicon-floppy-disk"></Glyphicon></Button></td>
+              </tr>
+            )
+          } else {
+            return (
+              <tr key={this.props.data.time} className='editing'>
+                <td>{this.props.data.time}</td>
+                <td><AutoInput placeholder = {this.props.data.content} commonWords = {this.props.commonWords} ref="newContent"/></td>
+                <td><input type="number" min="1" max="10" title="Virkni" placeholder={this.props.data.pleasure} ref="pleasure" /></td>
+                <td><input type="number" min="1" max="10" title="Ánægja" placeholder={this.props.data.skill} ref="skill" /></td>
+                <td><Button bsStyle="primary" title="Vista" onClick={this.saveEdit.bind(this)}><Glyphicon glyph="glyphicon glyphicon-floppy-disk"></Glyphicon></Button></td>
+              </tr>
+            )
+          }
+
+        }
+
     } else {
-      return (
-        <tr key={this.props.data.time}>
-          <td>{this.props.data.time}</td>
-          <td>{this.props.data.content}</td>
-          <td>{this.props.data.pleasure}</td>
-          <td>{this.props.data.skill}</td>
-          <td><button onClick={this.startEditing.bind(this)}>Breyta</button></td>
-        </tr>
-      )
+      if(this.props.isInFuture) {
+        return (
+          <tr key={this.props.data.time} className='saved'>
+            <td>{this.props.data.time}</td>
+            <td>{this.props.data.content}</td>
+            <td><Button bsStyle="primary" title="Breyta" onClick={this.startEditing.bind(this)}><Glyphicon glyph="glyphicon glyphicon-pencil"></Glyphicon></Button></td>
+          </tr>
+        )
+      } else {
+        return (
+          <tr key={this.props.data.time} className='saved'>
+            <td>{this.props.data.time}</td>
+            <td>{this.props.data.content}</td>
+            <td>{this.props.data.pleasure}</td>
+            <td>{this.props.data.skill}</td>
+            <td><Button bsStyle="primary" title="Breyta" onClick={this.startEditing.bind(this)}><Glyphicon glyph="glyphicon glyphicon-pencil"></Glyphicon></Button></td>
+          </tr>
+        )
+      }
+
     }
   }
 }

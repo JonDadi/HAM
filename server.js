@@ -79,9 +79,42 @@ app.get('/getScheduleItems/:date', (req, res) => {
 });
 
 app.get('/commonWords', (req, res) => {
-  const commonWords = ['Borða', 'Sofa', 'Læra heima', 'Dansa', 'Fara í ræktina'];
-  res.json(commonWords);
+    db.getCommonWords()
+    .then( data => {
+      res.json(data);
+    })
+    .catch(error => {
+      console.log(error);
+    })
 });
+
+app.get('/fetchThoughtTemplates', (req, res) => {
+  db.getAllThoughtTemplates( 1 )
+  .then( data => {
+    res.json(data);
+  })
+  .catch( error => {
+    console.log(error);
+  })
+});
+app.post('/saveThoughtTemplate', (req, res) => {
+  const thoughtTemplate = req.body.thoughtTemplate;
+  thoughtTemplate.userId = 1;
+  db.saveThoughtTemplate( thoughtTemplate )
+  .then( id => {
+    res.json(id);
+  });
+});
+app.post('/updateThoughtTemplates', (req, res) => {
+  const thoughtTemplate = req.body.thoughtTemplate;
+  db.updateThoughtTemplates( thoughtTemplate );
+});
+app.post('/deleteThoughtTemplates', (req, res) => {
+  const thoughtTemplate = req.body.thoughtTemplate;
+  db.deleteThoughtTemplates( thoughtTemplate.id );
+});
+
+
 
 app.listen(app.get('port'), () => {
   console.log(`Find the server at: http://localhost:${app.get('port')}/`); // eslint-disable-line no-console

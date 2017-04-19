@@ -35,7 +35,46 @@ function createTables(){
     console.log("Failed to create scheduleItems table!", error)
   });
 
+  db.none(`CREATE TABLE IF NOT EXISTS thoughtTemplate(
+            id                  SERIAL PRIMARY KEY,
+            date                timestamp,
+            userId              integer,
+            action              varchar,
+            thought             varchar,
+            solution            varchar
+          )`)
+  .then( () => {
+    console.log("thoughtTemplate table created!");
+  })
+  .catch( (error) => {
+    console.log("Failed to create thoughtTemplate table!", error)
+  });
+
 }
+
+function deleteThoughtTemplate ( thoughtId ) {
+    db.none(`DELETE FROM thoughtTemplate WHERE id = $1`, [thoughtId]);
+}
+function editThoughtTemplate( newThoughtTemplate ) {
+   db.none(`UPDATE thoughtTemplate SET action = $1, thought = $2, solution = $3
+            WHERE id = $4`,
+           [newThoughtTemplate.action, newThoughtTemplate.thought,
+            newThoughtTemplate.solution, newThoughtTemplate.id]);
+
+}
+
+function saveThoughtTemplate ( newThoughtTemplate ) {
+  return db.one(`INSERT INTO thoughtTemplate( date, action, thought, solution, userId )
+           VALUES($1, $2, $3, $4, $5) RETURNING id`,
+          [newThoughtTemplate.time, newThoughtTemplate.action,
+           newThoughtTemplate.thought, newThoughtTemplate.solution,
+           newThoughtTemplate.userId]);
+}
+
+function getAllThoughtTemplates( userId ) {
+  db.any(`SELECT * FROM thoughtTemplate WHERE userId = $1`, [userId]);
+}
+
 
 function getActivityStats( userId, numDays ) {
 
@@ -76,6 +115,10 @@ function getActivityItemsForDate( date ) {
   return db.any(`SELECT * FROM activityItems WHERE date = $1`, [date]);
 }
 
+
+function getAllThoughtTemplates( userId ) {
+  return db.any(`SELECT * FROM thoughtTemplate WHERE userId = $1`, [userId]);
+}
 
 function createFreshActivityItems(newDate, userId ) {
   let time = createTimeTable();
@@ -123,7 +166,21 @@ function createTimeTable() {
   return time;
 }
 
+function getCommonWords() {
+  return db.any(`SELECT content, COUNT(content) AS count
+                 FROM activityItems
+                 WHERE content IS NOT NULL
+                 GROUP BY content
+                 ORDER BY count DESC
+                 LIMIT 50`);
+}
+
+
 module.exports = {
+  deleteThoughtTemplate,
+  editThoughtTemplate,
+  saveThoughtTemplate,
+  getAllThoughtTemplates,
   getActivityStats,
   createTables,
   insertActivityItem,
@@ -134,4 +191,5 @@ module.exports = {
   updateScheduleItem,
   createFreshActivityItems,
   createFreshScheduleItems,
+  getCommonWords,
 };

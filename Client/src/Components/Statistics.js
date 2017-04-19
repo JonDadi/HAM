@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import './App.css';
-import Chart from './Chart';
+import Chart from './chart';
+import NavBarMenu from './navBarMenu';
 
 class Statistics extends Component {
 
@@ -12,7 +12,8 @@ class Statistics extends Component {
 
   render() {
     return (
-      <div>
+      <div className='statisticsWrapper'>
+        <NavBarMenu />
         <h1> My statistics </h1>
         <Chart ref='statChart'/>
         <label> Hversu marga daga aftur í tímann viltu skoða?
