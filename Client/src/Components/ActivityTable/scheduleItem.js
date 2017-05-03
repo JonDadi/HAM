@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './App.css';
 import CommonSelect from './commonSelect';
 
 class ScheduleItem extends Component {

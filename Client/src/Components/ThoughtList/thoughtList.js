@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import './App.css';
 import {Button} from 'react-bootstrap';
-import NavBarMenu from './navBarMenu';
 import axios from 'axios';
 import ThoughtListItem from './thoughtListItem';
+import { browserHistory } from 'react-router';
 
 const items = [];
 

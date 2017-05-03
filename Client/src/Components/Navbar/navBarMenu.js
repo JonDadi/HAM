@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import './App.css';
 import {Navbar} from 'react-bootstrap';
 import {Nav} from 'react-bootstrap';
 import {MenuItem} from 'react-bootstrap';
 import {NavItem} from 'react-bootstrap';
 import {NavDropdown} from 'react-bootstrap';
+import {Link} from 'react-router';
 
 class navBarMenu extends Component {
   constructor(props){
@@ -15,21 +15,21 @@ class navBarMenu extends Component {
         <Navbar inverse collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
-              <a href="/">HAM</a>
+              <Link to="/">HAM</Link>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav>
               <NavDropdown eventKey={1} title="Skjölin mín" id="basic-nav-dropdown">
-                <MenuItem eventKey={1,1} href="/activityTable"> Virknitafla </MenuItem>
-                <MenuItem eventKey={1,2} href="/thoughtsTemplate"> Hugsanir sem standa í vegi framkvæmda </MenuItem>
-                <MenuItem eventKey={1,3} href="/statistics"> Tölfræði </MenuItem>
-                <MenuItem eventKey={1,4} href="/thoughtTable"> Hugsanaskrá </MenuItem>
+                <MenuItem eventKey={1,1}> <Link to="/activityTable">Virknitaflan mín </Link></MenuItem>
+                <MenuItem eventKey={1,2}> <Link to="/thoughtsTemplate">Hugsanir sem standa í vegi framkvæmda </Link> </MenuItem>
+                <MenuItem eventKey={1,3}> <Link to="/statistics">Tölfræði</Link></MenuItem>
+                <MenuItem eventKey={1,4}> <Link to="/thoughtTable">Hugsanaskrá</Link></MenuItem>
               </NavDropdown>
             </Nav>
             <Nav pullRight>
-              <NavItem eventKey={2} href="/about">Um síðuna</NavItem>
+              <NavItem eventKey={2}><Link to="/"> {localStorage.getItem("userName")} < /Link></NavItem>
             </Nav>
           </Navbar.Collapse>
         </Navbar>

@@ -50,7 +50,34 @@ function createTables(){
     console.log("Failed to create thoughtTemplate table!", error)
   });
 
+  db.none(`CREATE TABLE IF NOT EXISTS hamUser(
+            id             SERIAL PRIMARY KEY,
+            username       varchar(32),
+            password       varchar(64),
+            signupdate     timestamp
+  )`)
+  .then(() => {
+    console.log('user table created!');
+  })
+  .catch((error) => {
+    console.log('error creating user table ' + error);
+  });
+
+
 }
+
+function findOne(userName) {
+  return db.any(`SELECT * FROM hamUser WHERE username = $1`, [userName]);
+}
+function getUserId(userName) {
+  return db.any(`SELECT id FROM hamUser WHERE username = $1`, [userName]);
+}
+function insertUser(user, pass, date) {
+  return db.none(`INSERT INTO hamUser(username, password, signupdate) VALUES($1, $2, $3)`,
+  [user, pass, date]);
+}
+
+
 
 function deleteThoughtTemplate ( thoughtId ) {
     db.none(`DELETE FROM thoughtTemplate WHERE id = $1`, [thoughtId]);
@@ -177,6 +204,9 @@ function getCommonWords() {
 
 
 module.exports = {
+  findOne,
+  getUserId,
+  insertUser,
   deleteThoughtTemplate,
   editThoughtTemplate,
   saveThoughtTemplate,

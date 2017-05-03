@@ -1,22 +1,29 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import ActivityItem from './activityItem';
-import NavBarMenu from './navBarMenu';
+import NavBarMenu from '../Navbar/navBarMenu';
 import { Table } from 'react-bootstrap';
 import Calendar from './calendar';
 import moment from 'moment';
+import { browserHistory } from 'react-router';
 
-import './App.css';
 
 const commonWords = [];
 const mockData = [];
 const isInFuture = false;
 let numComponentsEditing = 0;
 
-// goo.gl/HnqwDX
-
-
 class ActivityTable extends Component {
+  componentWillMount(){
+    const isLoggedIn = localStorage.getItem("loggedin");
+    console.log("tester"+isLoggedIn);
+    if(!isLoggedIn) {
+      console.log("redirect");
+      browserHistory.push('/login');
+    } else {
+      console.log("hér?"+isLoggedIn);
+    }
+  }
   constructor(props){
     super(props);
     console.log("Bý til activity table");
@@ -26,6 +33,8 @@ class ActivityTable extends Component {
       numComponentsEditing,
     };
   }
+
+
   componentDidMount() {
     this.updateActivityTable(  );
   }
@@ -66,7 +75,11 @@ class ActivityTable extends Component {
         this.setState({commonWords: res.data});
       })
       .catch( error =>{
-        console.log(error);
+        if(error.response.status === 303) {
+          // User is not logged in on server
+          browserHistory.push('/login');
+        }
+
     })
     axios.get('/getActivityItems/'+newDate)
       .then( res => {

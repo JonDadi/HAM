@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './App.css';
 import {extendMoment} from 'moment-range';
 import Moment from 'moment';
 import DateRangePicker from 'react-daterange-picker';

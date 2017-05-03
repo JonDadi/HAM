@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import './App.css';
 import {Line} from 'react-chartjs-2';
 import { browserHistory } from 'react-router';
 

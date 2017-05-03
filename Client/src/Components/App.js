@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
-import NavBarMenu from './navBarMenu';
-
+import NavBarMenu from './Navbar/navBarMenu';
+import { browserHistory } from 'react-router';
+import './App.css';
 class App extends Component {
-
+  logout(){
+    console.log("jó");
+    localStorage.setItem("loggedin", false);
+    browserHistory.push('/login');
+  }
   render() {
     return (
       /*<div className="App">
@@ -15,6 +20,7 @@ class App extends Component {
         <NavBarMenu />
         <div className="frontPageWrapper">
           <h1>Hugræn Atferlismeðferð!</h1>
+          <button onClick={this.logout.bind(this)}>Útskrá</button>
           <p>Vantar efni!!</p>
         </div>
       </div>

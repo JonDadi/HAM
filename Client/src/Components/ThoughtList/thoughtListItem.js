@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
-import './App.css';
 import {Button} from 'react-bootstrap';
-import NavBarMenu from './navBarMenu';
 import axios from 'axios';
-
-
-const items = [];
 
 class ThoughtListItem extends Component {
 

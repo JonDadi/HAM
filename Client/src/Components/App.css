@@ -1,12 +1,27 @@
 .App {
   text-align: center;
 }
-
 .frontPageWrapper {
   max-width: 1024px;
   margin: 0 auto;
 }
 
+
+/* Login and register page */
+.loginPage {
+  max-width: 1024px;
+  margin: 0 auto;
+  text-align: center;
+
+}
+.loginPage input {
+  display: block;
+  max-width: 512px;
+  margin: 0 auto;
+}
+
+
+/* Statistics site */
 .statisticsWrapper {
   text-align: center;
 }
@@ -14,28 +29,15 @@
   max-height: 512px;
 }
 
-
-.tableWrapper {
-  max-width: 1024px;
-  margin: 0 auto;
-}
-.dateWrapper {
-  margin: 0 auto;
-  max-width: 1024px;
-  text-align: center;
-}
-
-
+/* Thoughts list site */
 .thoughtsInputWrapper {
   max-width: 1024px;
   margin: 0 auto;
 }
-
 .thoughtsInputWrapper label {
   display: block;
 }
-
-.thoughtsInputWrapper textarea {
+.thoughtsInputWrapper textarea, input {
   display: block;
   width: 100%;
 }
@@ -47,10 +49,38 @@
   text-align: center;
 }
 
+
+/* Activity/Schedule table */
 tr.badInput td {
   background-color: #ffdfdf;
 }
+.tableWrapper {
+  max-width: 1024px;
+  margin: 0 auto;
+}
+.tableWrapper table {
 
+}
+
+tr td:last-child{
+    width:1%;
+    white-space:nowrap;
+}
+.dateWrapper {
+  margin: 0 auto;
+  max-width: 1024px;
+  text-align: center;
+}
+th {
+  background: #fff7ed;
+}
+
+.tableWrapper input[type="number"] {
+   width:40px;
+}
+.tableWrapper input[type="text"] {
+   width:100%;
+}
 /*
 tr.saved td {
   background-color: #f9fff9;
@@ -66,16 +96,8 @@ tr.editing:hover td {
   background-color: #fffde5;
 }
 */
-th {
-  background: #fff7ed;
-}
 
-input[type="number"] {
-   width:40px;
-}
-input[type="text"] {
-   width:100%;
-}
+
 
 /*
    Style for auto-suggest copied from

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Chart from './chart';
-import NavBarMenu from './navBarMenu';
+import NavBarMenu from '../Navbar/navBarMenu';
+import { browserHistory } from 'react-router';
+import axios from 'axios';
 
 class Statistics extends Component {
 
@@ -15,7 +17,6 @@ class Statistics extends Component {
       <div className='statisticsWrapper'>
         <NavBarMenu />
         <h1> My statistics </h1>
-        <Chart ref='statChart'/>
         <label> Hversu marga daga aftur í tímann viltu skoða?
           <input type='number'
             min='1'
@@ -23,6 +24,7 @@ class Statistics extends Component {
             onChange={this.numDaysChanged.bind(this)}
             ref='numDays'/>
         </label>
+        <Chart ref='statChart'/>
       </div>
     )
   }

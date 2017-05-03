@@ -4,6 +4,7 @@ import {Button} from 'react-bootstrap';
 import {Glyphicon} from 'react-bootstrap';
 import AutoInput from './autoInput';
 
+
 class ActivityItem extends Component {
   constructor(props){
     super(props);
