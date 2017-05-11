@@ -60,6 +60,7 @@ class login extends Component {
         <input type='text' title='Notendanafn' ref='username' placeholder='Notendanafn' />
         <input type='password' title='Lykilorð' ref='password' placeholder='Lykilorð' />
         <button title='Innskrá' onClick={this.signIn.bind(this)}> Innskrá </button>
+        <p>Áttu ekki notanda? Endilega nýskráðu þig <Link to="/register"> hér!</Link></p>
         <p className='errorMsg'>Villa: {this.errorMessage}</p>
       </div>
       );
