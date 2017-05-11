@@ -18,7 +18,12 @@
   display: block;
   max-width: 512px;
   margin: 0 auto;
+  margin-top: 4px;
 }
+.loginPage button {
+  margin-top: 10px;
+}
+
 
 
 /* Statistics site */
@@ -29,13 +34,18 @@
   max-height: 512px;
 }
 
+
 /* Thoughts list site */
+
 .thoughtsInputWrapper {
   max-width: 1024px;
   margin: 0 auto;
 }
 .thoughtsInputWrapper label {
   display: block;
+}
+.thoughtsInputWrapper button {
+  margin-right: 20px;
 }
 .thoughtsInputWrapper textarea, input {
   display: block;
@@ -47,6 +57,7 @@
   margin-top: 20px;
   padding: 10px;
   text-align: center;
+   box-shadow: 5px 5px 5px #888888;
 }
 
 

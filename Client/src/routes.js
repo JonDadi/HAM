@@ -8,7 +8,7 @@ import Statistics from './Components/Statistics/statistics'
 import ThoughtsTemplate from './Components/ThoughtList/thoughtsTemplate';
 import Login from './Components/Login/login';
 import Register from './Components/Login/register';
-
+import Logout from './Components/Login/logout';
 
 function requireAuth(nextState, replaceState) {
   const isLoggedIn = localStorage.getItem("loggedin")
@@ -27,6 +27,7 @@ const Routes = (props) => (
     <Route path="/statistics" component={Statistics} onEnter={requireAuth} />
     <Route path="/login" component={Login} />
     <Route path="/register" component={Register} />
+    <Route path="/logout" component={Logout} />
     <Route path="*" component={ErrorPage} />
   </Router>
 );

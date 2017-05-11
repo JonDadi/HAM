@@ -2,8 +2,17 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { browserHistory } from 'react-router';
 
+const isError = false;
+const errorMessage = '';
 
 class login extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      isError
+    };
+  }
+
 
   signIn( ) {
     const userName = this.refs.username.value;
@@ -21,7 +30,8 @@ class login extends Component {
         localStorage.setItem("userName", res.data.user.username);
         browserHistory.push('/');
       } else {
-        console.log("Ekki welcome");
+        this.errorMessage = 'Vitlaust lykilorð/notendanafn';
+        this.setState({isError: true});
       }
 
     })
@@ -32,14 +42,26 @@ class login extends Component {
   }
 
   render() {
+    if(!this.state.isError){
+      return (
+        <div className='loginPage'>
+          <h1>Innskráning</h1>
+          <input type='text' title='Notendanafn' ref='username' placeholder='Notendanafn' />
+          <input type='password' title='Lykilorð' ref='password' placeholder='Lykilorð' />
+          <button title='Innskrá' onClick={this.signIn.bind(this)}> Innskrá </button>
+        </div>
+      );
+    } else {
     return (
       <div className='loginPage'>
         <h1>Innskráning</h1>
         <input type='text' title='Notendanafn' ref='username' placeholder='Notendanafn' />
         <input type='password' title='Lykilorð' ref='password' placeholder='Lykilorð' />
         <button title='Innskrá' onClick={this.signIn.bind(this)}> Innskrá </button>
+        <p className='errorMsg'>Villa: {this.errorMessage}</p>
       </div>
-    );
+      );
+    }
   }
 }
 

@@ -59,7 +59,7 @@ class Chart extends Component {
     })
   }
   componentWillMount() {
-      this.updateChart(1);
+      this.updateChart(7);
   }
   render() {
     return (

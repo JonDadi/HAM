@@ -46,10 +46,7 @@ app.use((req, res, next) => {
   next();
 });
 
-
-
-
-
+// Create the tables in the database
 db.createTables();
 
 // Express only serves static assets in production
@@ -57,24 +54,15 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
 }
 
-
 app.post('/register', (req, res, next) => {
-  console.log('reging');
   passport.authenticate('local-signup', (err, user, info) => {
 
     if(user){
       req.logIn(user, err => {
         if(err){ return next(err); }
-        console.log('logged in?');
       })
     }
 
-    console.log('error'+err);
-    console.log(user);
-    console.log(info);
-    console.log(':)');
-    console.log(req.user);
-    console.log(req.isAuthenticated());
     if(req.user){
       res.json({user:req.user});
     } else {
@@ -89,16 +77,8 @@ app.post('/login', (req, res, next) => {
     if(user){
       req.logIn(user, err => {
         if(err){ return next(err); }
-        console.log('logged in?');
       })
     }
-
-    console.log('error'+err);
-    console.log(user);
-    console.log(info);
-    console.log(':)');
-    console.log(req.user);
-    console.log(req.isAuthenticated());
 
     if(req.user){
       res.json({user:req.user});
@@ -184,6 +164,7 @@ app.post('/insertActivityItem', (req, res) => {
     db.updateActivityItem(activityItem, userId);
   }
 });
+
 app.post('/insertScheduleItem', (req, res) => {
   if(!req.user){
     res.status(303).send({error: 'Not logged in'});
@@ -195,6 +176,7 @@ app.post('/insertScheduleItem', (req, res) => {
   }
 });
 
+// Get all activity items for a specific date
 app.get('/getActivityItems/:date', (req, res) => {
   if(!req.user){
     res.status(303).send({error: 'Not logged in'});
@@ -219,6 +201,7 @@ app.get('/getActivityItems/:date', (req, res) => {
   }
 });
 
+// Get all schedule items for a specific date.
 app.get('/getScheduleItems/:date', (req, res) => {
   if(!req.user){
     res.status(303).send({error: 'Not logged in'});
@@ -244,6 +227,7 @@ app.get('/getScheduleItems/:date', (req, res) => {
   }
 });
 
+// Return the most commonly used entries for a user
 app.get('/commonWords', (req, res) => {
   if(!req.user){
     res.status(303).send({error: 'Not logged in'});
@@ -260,6 +244,7 @@ app.get('/commonWords', (req, res) => {
 
 });
 
+// Get a users thought templates
 app.get('/fetchThoughtTemplates', (req, res) => {
   if(!req.user){
     res.status(303).send({error: 'Not logged in'});

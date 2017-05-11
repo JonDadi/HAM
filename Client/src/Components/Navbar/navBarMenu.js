@@ -28,7 +28,7 @@ class navBarMenu extends Component {
               </NavDropdown>
             </Nav>
             <Nav pullRight>
-              <NavItem eventKey={2}><Link to="/logout"> Útskrá notanda:{localStorage.getItem("userName")} < /Link></NavItem>
+              <NavItem eventKey={2}><Link to="/logout"> Útskrá < /Link></NavItem>
             </Nav>
           </Navbar.Collapse>
         </Navbar>

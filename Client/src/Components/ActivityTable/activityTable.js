@@ -16,12 +16,9 @@ let numComponentsEditing = 0;
 class ActivityTable extends Component {
   componentWillMount(){
     const isLoggedIn = localStorage.getItem("loggedin");
-    console.log("tester"+isLoggedIn);
     if(!isLoggedIn) {
       console.log("redirect");
       browserHistory.push('/login');
-    } else {
-      console.log("hér?"+isLoggedIn);
     }
   }
   constructor(props){
@@ -33,7 +30,6 @@ class ActivityTable extends Component {
       numComponentsEditing,
     };
   }
-
 
   componentDidMount() {
     this.updateActivityTable(  );
@@ -93,8 +89,6 @@ class ActivityTable extends Component {
         console.log(error);
       })
 
-
-
   }
   incrementEditingCounter() {
     this.setState({numComponentsEditing: numComponentsEditing++});
@@ -124,7 +118,7 @@ class ActivityTable extends Component {
       activityItem: newActivityItem,
     })
     .then( res => {
-      console.log(res);
+
     })
     .catch( error => {
       console.log(error);
@@ -154,7 +148,7 @@ class ActivityTable extends Component {
                 <input type='date'
                        title="Dagsetning"
                        onChange={this.updateActivityTable.bind(this)}
-                       ref='pickedDate' />
+                       ref='pickedDate'/>
               </label>
             </div>
             <div className='tableWrapper'>

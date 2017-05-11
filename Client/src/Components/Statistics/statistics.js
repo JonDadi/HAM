@@ -16,11 +16,11 @@ class Statistics extends Component {
     return (
       <div className='statisticsWrapper'>
         <NavBarMenu />
-        <h1> My statistics </h1>
+        <h1> Tölfræðin mín </h1>
         <label> Hversu marga daga aftur í tímann viltu skoða?
           <input type='number'
             min='1'
-            placeholder='1'
+            placeholder='7'
             onChange={this.numDaysChanged.bind(this)}
             ref='numDays'/>
         </label>
