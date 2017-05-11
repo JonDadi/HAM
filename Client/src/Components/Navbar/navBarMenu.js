@@ -22,14 +22,13 @@ class navBarMenu extends Component {
           <Navbar.Collapse>
             <Nav>
               <NavDropdown eventKey={1} title="Skjölin mín" id="basic-nav-dropdown">
-                <MenuItem eventKey={1,1}> <Link to="/activityTable">Virknitaflan mín </Link></MenuItem>
+                <MenuItem eventKey={1,1}> <Link to="/activityTable">Virknitafla/Vikuáætlunin mín </Link></MenuItem>
                 <MenuItem eventKey={1,2}> <Link to="/thoughtsTemplate">Hugsanir sem standa í vegi framkvæmda </Link> </MenuItem>
                 <MenuItem eventKey={1,3}> <Link to="/statistics">Tölfræði</Link></MenuItem>
-                <MenuItem eventKey={1,4}> <Link to="/thoughtTable">Hugsanaskrá</Link></MenuItem>
               </NavDropdown>
             </Nav>
             <Nav pullRight>
-              <NavItem eventKey={2}><Link to="/"> {localStorage.getItem("userName")} < /Link></NavItem>
+              <NavItem eventKey={2}><Link to="/"> Útskrá notanda: {localStorage.getItem("userName")} < /Link to="/logout"></NavItem>
             </Nav>
           </Navbar.Collapse>
         </Navbar>

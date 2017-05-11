@@ -54,9 +54,9 @@ class ActivityTable extends Component {
   getTodaysDate() {
     var today = new Date();
     var dd = today.getDate();
-    var mm = today.getMonth()+1; //January is 0!
-
+    var mm = today.getMonth()+1;
     var yyyy = today.getFullYear();
+
     if(dd<10){
         dd='0'+dd;
     }
@@ -79,7 +79,6 @@ class ActivityTable extends Component {
           // User is not logged in on server
           browserHistory.push('/login');
         }
-
     })
     axios.get('/getActivityItems/'+newDate)
       .then( res => {

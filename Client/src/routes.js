@@ -12,7 +12,6 @@ import Register from './Components/Login/register';
 
 function requireAuth(nextState, replaceState) {
   const isLoggedIn = localStorage.getItem("loggedin")
-  console.log("logged? "+ isLoggedIn);
   if(!isLoggedIn) {
     replaceState({
       pathname: '/login'
