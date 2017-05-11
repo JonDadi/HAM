@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { browserHistory } from 'react-router';
+import { Link } from 'react-router';
 
 const isError = false;
 const errorMessage = '';
@@ -48,6 +49,7 @@ class login extends Component {
           <h1>Innskráning</h1>
           <input type='text' title='Notendanafn' ref='username' placeholder='Notendanafn' />
           <input type='password' title='Lykilorð' ref='password' placeholder='Lykilorð' />
+          <p>Áttu ekki notanda? Endilega nýskráðu þig <Link to="/register"> hér!</Link></p>
           <button title='Innskrá' onClick={this.signIn.bind(this)}> Innskrá </button>
         </div>
       );

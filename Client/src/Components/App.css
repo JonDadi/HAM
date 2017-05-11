@@ -6,6 +6,10 @@
   margin: 0 auto;
 }
 
+/* Error page */
+.errorPage {
+  text-align: center;
+}
 
 /* Login and register page */
 .loginPage {

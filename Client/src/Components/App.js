@@ -1,8 +1,23 @@
 import React, { Component } from 'react';
 import NavBarMenu from './Navbar/navBarMenu';
+import axios from 'axios';
 import { browserHistory } from 'react-router';
 import './App.css';
 class App extends Component {
+
+  // Very bad way of checking if user is logged in or not.
+  componentWillMount(){
+    axios.get('/commonWords')
+      .then( res => {
+
+      })
+      .catch( error =>{
+        if(error.response.status === 303) {
+          // User is not logged in on server
+          browserHistory.push('/login');
+        }
+    })
+  }
 
   render() {
     return (

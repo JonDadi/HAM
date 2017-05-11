@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import CommonSelect from './commonSelect';
 import {Button} from 'react-bootstrap';
 import {Glyphicon} from 'react-bootstrap';
 import AutoInput from './autoInput';

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { browserHistory } from 'react-router';
 
+
+
 const isError = false;
 const errorMessage = '';
 
@@ -28,7 +30,7 @@ class register extends Component {
         if(res.data.user){
           localStorage.setItem("loggedin", true);
           browserHistory.push('/');
-        } 
+        }
       })
       .catch( error => {
         console.log("error");
