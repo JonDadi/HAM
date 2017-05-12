@@ -20,6 +20,15 @@ class register extends Component {
     const userName = this.refs.username.value;
     const passwd = this.refs.password.value;
     const psswd2 = this.refs.passwordAgain.value;
+    if(!userName){
+      this.errorMessage = 'Verður að fylla út notendanafn!';
+      this.setState({isError: true});
+    }
+    if(!passwd){
+      this.errorMessage = 'Verður að velja lykilorð!';
+      this.setState({isError: true});
+    }
+
 
     if(passwd === psswd2){
       axios.post('/register', {

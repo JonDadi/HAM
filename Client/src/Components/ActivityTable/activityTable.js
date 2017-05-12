@@ -70,7 +70,7 @@ class ActivityTable extends Component {
       .then( res => {
         let newCommonWords = [];
         if(res.data.length < 1 ) {
-          newCommonWords = ['x'];
+          newCommonWords = [{content:'x'}];
         } else {
           newCommonWords = res.data;
         }
