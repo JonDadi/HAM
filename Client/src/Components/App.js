@@ -4,7 +4,6 @@ import axios from 'axios';
 import { browserHistory } from 'react-router';
 import './App.css';
 class App extends Component {
-
   // Very bad way of checking if user is logged in or not.
   componentWillMount(){
     axios.get('/commonWords')
