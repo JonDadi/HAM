@@ -23,10 +23,12 @@ class register extends Component {
     if(!userName){
       this.errorMessage = 'Verður að fylla út notendanafn!';
       this.setState({isError: true});
+      return;
     }
     if(!passwd){
       this.errorMessage = 'Verður að velja lykilorð!';
       this.setState({isError: true});
+      return;
     }
 
 
