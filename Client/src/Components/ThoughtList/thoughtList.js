@@ -17,14 +17,11 @@ class ThoughtList extends Component {
   }
 
   fetchThoughtList() {
-    console.log("wasup");
     axios.get( '/fetchThoughtTemplates')
     .then( res => {
       this.setState({items: res.data.reverse()});
-      console.log("data"+res.data);
     });
   }
-
 
   render() {
         const thoughtItems = this.state.items.map( item => {

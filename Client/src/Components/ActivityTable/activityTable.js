@@ -67,8 +67,14 @@ class ActivityTable extends Component {
     if(!newDate) newDate = this.getTodaysDate();
     console.log('dagsetning valin'+ newDate);
     axios.get('/commonWords')
+      let newCommonWords = [];
       .then( res => {
-        this.setState({commonWords: res.data});
+        if(res.data.length < 1 ) {
+          newCommonWords = ['x'];
+        } else {
+          newCommonWords = res.data;
+        }
+        this.setState({commonWords: newCommonWords});
       })
       .catch( error =>{
         if(error.response.status === 303) {

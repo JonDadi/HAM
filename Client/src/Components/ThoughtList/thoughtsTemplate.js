@@ -31,7 +31,6 @@ class ThoughtsTemplate extends Component {
         thoughtTemplate: thoughtTemplate,
       })
       .then( res => {
-        console.log("ID er"+res);
       });
 
       this.refs.actionText.value = "";

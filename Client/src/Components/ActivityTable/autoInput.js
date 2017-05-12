@@ -10,7 +10,6 @@ let commonWords = [];
 const getSuggestion = value => {
   const inputLength = value.length;
   const inputValue = value.toLowerCase();
-  console.log("LENGD"+commonWords[0].content);
   return inputLength === 0 ? [] : commonWords.filter( item =>
     item.content.toLowerCase().slice(0, inputLength) === inputValue
   );

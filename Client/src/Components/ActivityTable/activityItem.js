@@ -62,10 +62,8 @@ class ActivityItem extends Component {
           || newSkill > 10 || newSkill < 0 || newPleasure > 10
           || newPleasure < 0) {
         // User has not filled out all the inputs or inputs are invalid
-        console.log("bad input!");
         this.setState({badInput: true});
       } else {
-        console.log('Sending new activityItem to the db!')
         const newActivityItem = {time: this.props.data.time,
                                  content: newContent,
                                  skill: newSkill,
@@ -78,10 +76,8 @@ class ActivityItem extends Component {
       // Item is in the future,  so no skill or pleasure
       if( !newContent) {
         // User has not filled out all the inputs or inputs are invalid
-        console.log("bad input!");
         this.setState({badInput: true});
       } else {
-        console.log('Sending new activityItem to the db!')
         const newActivityItem = {time: this.props.data.time,
                                  content: newContent,
                                  skill: 0,
@@ -165,7 +161,6 @@ class ActivityItem extends Component {
           </tr>
         )
       }
-
     }
   }
 }
